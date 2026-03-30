@@ -359,10 +359,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         <div class="tl">ram</div><div class="tv" id="tv-ram">–</div>
         <div class="sbw"><div class="sb" id="sb-ram" style="width:0%;background:#2d7a4f"></div></div>
       </div>
-      <div class="tile" id="tc-gpu" style="display:none">
-        <div class="tl">gpu</div><div class="tv" id="tv-gpu">–</div>
-        <div class="sbw"><div class="sb" id="sb-gpu" style="width:0%;background:#b85c1a"></div></div>
-      </div>
       <div class="tile" id="tc-ssd" style="display:none">
         <div class="tl">ssd c:</div><div class="tv" id="tv-ssd-c">–</div>
         <div class="sbw"><div class="sb" id="sb-ssd-c" style="width:0%;background:#7a5fa5"></div></div>
@@ -755,7 +751,7 @@ function buildLocTriangle(lat,lon,city,region){
         <div xmlns="http://www.w3.org/1999/xhtml"
           style="width:${S}px;height:${S}px;overflow:hidden;position:relative;background:#2a2a2a">
           <iframe
-            src="https://www.openstreetmap.org/export/embed.html?bbox=${lon-zoom}%2C${lat-zoom*0.7}%2C${lon+zoom}%2C${lat+zoom*0.7}&layer=mapnik&marker=${lat}%2C${lon}"
+            src="https://www.openstreetmap.org/export/embed.html?mlat=${lat}&mlon=${lon}&zoom=13&layers=M"
             style="width:${Math.round(S*1.6)}px;height:${Math.round(S*1.6)}px;border:none;margin-left:-${Math.round(S*0.3)}px;margin-top:-${Math.round(S*0.3)}px;pointer-events:none;filter:saturate(0.75) brightness(0.88)"
             loading="lazy" scrolling="no"></iframe>
         </div>
@@ -885,7 +881,7 @@ async function loadStats(){
     const r=await fetch('http://localhost:8765/system.json?t='+Date.now());
     if(!r.ok)throw 0;
     const d=await r.json();
-    ['cpu','ram','gpu','ssd'].forEach(k=>{
+    ['cpu','ram','ssd'].forEach(k=>{
       document.getElementById('tc-'+k).style.display='';
     });
     document.getElementById('pc-status').textContent='pc online';
@@ -896,10 +892,6 @@ async function loadStats(){
     // RAM
     document.getElementById('tv-ram').textContent=`${d.ram}% (${d.ram_free}GB frei)`;
     setSbar('sb-ram',d.ram,'#2d7a4f');
-    // GPU — bar uses gpu_load (%), label shows temp + load
-    document.getElementById('tv-gpu').textContent=`${d.gpu_temp}°C / ${d.gpu_load}%`;
-    const gc=d.gpu_temp>80?'#b82a2a':d.gpu_temp>65?'#b85c1a':'#2d7a4f';
-    setSbar('sb-gpu',d.gpu_load,gc);
     // SSD C
     if(d.disk_c!=null){
       document.getElementById('tv-ssd-c').textContent=`${d.disk_c}%`;
