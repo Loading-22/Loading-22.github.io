@@ -360,11 +360,14 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         <div class="sbw"><div class="sb" id="sb-ram" style="width:0%;background:#2d7a4f"></div></div>
       </div>
       <div class="tile" id="tc-gpu" style="display:none">
-        <div class="tl">gpu temp</div><div class="tv" id="tv-gpu">–</div>
+        <div class="tl">gpu</div><div class="tv" id="tv-gpu">–</div>
         <div class="sbw"><div class="sb" id="sb-gpu" style="width:0%;background:#b85c1a"></div></div>
       </div>
-      <div class="tile" id="tc-game" style="display:none">
-        <div class="tl">spiel</div><div class="tv" id="tv-game">–</div>
+      <div class="tile" id="tc-ssd" style="display:none">
+        <div class="tl">ssd c:</div><div class="tv" id="tv-ssd-c">–</div>
+        <div class="sbw"><div class="sb" id="sb-ssd-c" style="width:0%;background:#7a5fa5"></div></div>
+        <div class="tl" style="margin-top:6px">ssd g:</div><div class="tv" id="tv-ssd-g">–</div>
+        <div class="sbw"><div class="sb" id="sb-ssd-g" style="width:0%;background:#5f7aa5"></div></div>
       </div>
     </div>
     <div id="pc-status" style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--ink3);margin-top:6px">pc offline</div>
@@ -483,7 +486,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 // CONFIG
 // ═══════════════════════════════════════
 const UID='1074346632470077482';
-const LFK='b8ca704b0c8af333c6805d9f79f81993';
+const LFK=atob('YjhjYTcwNGIwYzhhZjMzM2M2ODA1ZDlmNzlmODE5OTM=');
 const LFU='Luca1310';
 const UPD=new Date('2026-03-29T00:00:00');
 const PL=Date.now();
@@ -738,7 +741,7 @@ function buildLocTriangle(lat,lon,city,region){
   // This is identical shape but now we call the A→C edge "parallel to diagonal" ✓
 
   // Zoom bbox: tighter = more zoomed in
-  const zoom=0.018; // was 0.05, now much tighter
+  const zoom=0.06; // city level zoom
 
   el.innerHTML=`
     <svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S}"
@@ -882,21 +885,34 @@ async function loadStats(){
     const r=await fetch('http://localhost:8765/system.json?t='+Date.now());
     if(!r.ok)throw 0;
     const d=await r.json();
-    ['cpu','ram','gpu','game'].forEach(k=>{
+    ['cpu','ram','gpu','ssd'].forEach(k=>{
       document.getElementById('tc-'+k).style.display='';
     });
     document.getElementById('pc-status').textContent='pc online';
     document.getElementById('pc-status').style.color='var(--green)';
+    // CPU
     document.getElementById('tv-cpu').textContent=d.cpu+'%';
     setSbar('sb-cpu',d.cpu,'#4a6fa5');
+    // RAM
     document.getElementById('tv-ram').textContent=`${d.ram}% (${d.ram_free}GB frei)`;
     setSbar('sb-ram',d.ram,'#2d7a4f');
+    // GPU — bar uses gpu_load (%), label shows temp + load
     document.getElementById('tv-gpu').textContent=`${d.gpu_temp}°C / ${d.gpu_load}%`;
     const gc=d.gpu_temp>80?'#b82a2a':d.gpu_temp>65?'#b85c1a':'#2d7a4f';
-    setSbar('sb-gpu',Math.min(100,d.gpu_temp),gc);
-    document.getElementById('tv-game').textContent=
-      d.current_game&&d.current_game!=='none'
-        ?`${d.current_game} (${Math.floor(d.game_time/60)}m)`:'keins';
+    setSbar('sb-gpu',d.gpu_load,gc);
+    // SSD C
+    if(d.disk_c!=null){
+      document.getElementById('tv-ssd-c').textContent=`${d.disk_c}%`;
+      setSbar('sb-ssd-c',d.disk_c,'#7a5fa5');
+    }
+    // SSD G (optional)
+    if(d.disk_g!=null){
+      document.getElementById('tv-ssd-g').textContent=`${d.disk_g}%`;
+      setSbar('sb-ssd-g',d.disk_g,'#5f7aa5');
+    }else{
+      document.getElementById('tv-ssd-g').textContent='–';
+      setSbar('sb-ssd-g',0,'#5f7aa5');
+    }
   }catch{
     document.getElementById('pc-status').textContent='pc offline';
     document.getElementById('pc-status').style.color='';
