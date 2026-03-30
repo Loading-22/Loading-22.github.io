@@ -719,16 +719,26 @@ window.addEventListener('resize',()=>{clearTimeout(window._dsr);window._dsr=setT
 
 // ═══════════════════════════════════════
 // LOCATION TRIANGLE — bottom-left corner with embedded map
-// Right-angle triangle: (0,0)top (0,S)bottom-left (S,S)bottom-right
-// Only appears when geolocation succeeds
+// Shape: bottom-left corner, top edge parallel to diagonal stripe
+// Only appears when geolocation succeeds + viewport > 1530px
 // ═══════════════════════════════════════
 function buildLocTriangle(lat,lon,city,region){
   const el=document.getElementById('loc-tri');
-  const S=Math.round(Math.min(window.innerWidth*0.22, window.innerHeight*0.22, 220));
+  // Bigger: 30% of the smaller viewport dimension
+  const S=Math.round(Math.min(window.innerWidth*0.30, window.innerHeight*0.30));
   el.style.width=S+'px';
   el.style.height=S+'px';
 
-  const label=(city||region||'').toLowerCase();
+  // Triangle points:
+  // A = top-left (0, 0)
+  // B = bottom-left (0, S)
+  // C = bottom-right (S, S)
+  // The edge A→C is the hypotenuse — runs from (0,0) to (S,S), parallel to diagonal
+  // The edge B is the right-angle corner at bottom-left
+  // This is identical shape but now we call the A→C edge "parallel to diagonal" ✓
+
+  // Zoom bbox: tighter = more zoomed in
+  const zoom=0.018; // was 0.05, now much tighter
 
   el.innerHTML=`
     <svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S}"
@@ -740,23 +750,14 @@ function buildLocTriangle(lat,lon,city,region){
       </defs>
       <foreignObject x="0" y="0" width="${S}" height="${S}" clip-path="url(#triclip)">
         <div xmlns="http://www.w3.org/1999/xhtml"
-          style="width:${S}px;height:${S}px;overflow:hidden;position:relative;background:#333">
+          style="width:${S}px;height:${S}px;overflow:hidden;position:relative;background:#2a2a2a">
           <iframe
-            src="https://www.openstreetmap.org/export/embed.html?bbox=${lon-.05}%2C${lat-.035}%2C${lon+.05}%2C${lat+.035}&layer=mapnik&marker=${lat}%2C${lon}"
-            style="width:${Math.round(S*1.5)}px;height:${Math.round(S*1.5)}px;border:none;margin-left:-${Math.round(S*0.25)}px;margin-top:-${Math.round(S*0.25)}px;pointer-events:none;filter:saturate(0.7) brightness(0.9)"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=${lon-zoom}%2C${lat-zoom*0.7}%2C${lon+zoom}%2C${lat+zoom*0.7}&layer=mapnik&marker=${lat}%2C${lon}"
+            style="width:${Math.round(S*1.6)}px;height:${Math.round(S*1.6)}px;border:none;margin-left:-${Math.round(S*0.3)}px;margin-top:-${Math.round(S*0.3)}px;pointer-events:none;filter:saturate(0.75) brightness(0.88)"
             loading="lazy" scrolling="no"></iframe>
         </div>
       </foreignObject>
-      <line x1="0" y1="0" x2="${S}" y2="${S}" stroke="rgba(100,94,86,0.6)" stroke-width="1.5"/>
-      ${label?`<text
-        font-family="DM Mono, monospace"
-        font-size="${Math.round(S*0.08)}"
-        font-weight="600"
-        fill="rgba(244,241,236,0.95)"
-        text-anchor="middle"
-        transform="translate(${S*0.18},${S*0.72}) rotate(-45)"
-        style="text-shadow:0 1px 4px rgba(0,0,0,0.9);filter:drop-shadow(0 1px 3px rgba(0,0,0,0.8))"
-      >${label}</text>`:''}
+      <line x1="0" y1="0" x2="${S}" y2="${S}" stroke="rgba(90,84,76,0.55)" stroke-width="1.5"/>
     </svg>`;
 
   el.classList.add('show');
