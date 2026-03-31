@@ -737,25 +737,31 @@ function buildLocTriangle(lat,lon,city,region){
   // This is identical shape but now we call the A→C edge "parallel to diagonal" ✓
 
   // Zoom bbox: tighter = more zoomed in
-  const zoom=0.06; // city level zoom
+  // Calculate bbox for ~zoom 14 (roughly 0.015° per side)
+  const d=0.012;
+  const bboxStr=`${lon-d}%2C${lat-d*0.7}%2C${lon+d}%2C${lat+d*0.7}`;
 
   el.innerHTML=`
     <svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S}"
       style="position:absolute;bottom:0;left:0;overflow:hidden;display:block">
       <defs>
         <clipPath id="triclip">
-          <polygon points="0,0 0,${S} ${S},${S}"/>
+          <!-- Triangle with hypotenuse parallel to diagonal (45°): top-left→bottom-right -->
+          <!-- Points: bottom-left(0,S), bottom-right(S,S), top-left(0,0) -->
+          <!-- This gives hypotenuse from (0,0) to (S,S) = 45° = parallel to stripe -->
+          <polygon points="0,${S} ${S},${S} 0,0"/>
         </clipPath>
       </defs>
       <foreignObject x="0" y="0" width="${S}" height="${S}" clip-path="url(#triclip)">
         <div xmlns="http://www.w3.org/1999/xhtml"
           style="width:${S}px;height:${S}px;overflow:hidden;position:relative;background:#2a2a2a">
           <iframe
-            src="https://www.openstreetmap.org/export/embed.html?mlat=${lat}&mlon=${lon}&zoom=14&layers=M"
-            style="width:${S*2}px;height:${S*2}px;border:none;margin-left:-${Math.round(S*0.5)}px;margin-top:-${Math.round(S*0.7)}px;pointer-events:none;filter:saturate(0.75) brightness(0.88)"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=${bboxStr}&layer=mapnik&marker=${lat}%2C${lon}"
+            style="width:${S}px;height:${S}px;border:none;pointer-events:none;filter:saturate(0.75) brightness(0.88)"
             loading="lazy" scrolling="no"></iframe>
         </div>
       </foreignObject>
+      <!-- Hypotenuse line: (0,0) to (S,S) — parallel to the diagonal stripe -->
       <line x1="0" y1="0" x2="${S}" y2="${S}" stroke="rgba(90,84,76,0.55)" stroke-width="1.5"/>
     </svg>`;
 
