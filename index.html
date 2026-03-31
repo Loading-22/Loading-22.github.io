@@ -720,16 +720,12 @@ window.addEventListener('resize',()=>{clearTimeout(window._dsr);window._dsr=setT
 // Only appears when geolocation succeeds + viewport > 1530px
 // ═══════════════════════════════════════
 function buildLocTriangle(lat,lon,city,region){
+  try{
   const el=document.getElementById('loc-tri');
   const W=window.innerWidth, H=window.innerHeight;
-  // TH = height of triangle (30% viewport height)
-  // TW = width so hypotenuse slope = H/W (same as diagonal)
   const TH=Math.round(H*0.30);
   const TW=Math.round(TH*(W/H));
-
-  // Triangle: right angle at bottom-left
-  // (0,0)=top-left, (0,TH)=bottom-left, (TW,TH)=bottom-right
-  // Hypotenuse (0,0)→(TW,TH): slope = TH/TW = H/W ✓ parallel to diagonal
+  tl(`triangle: ${TW}x${TH} viewport:${W}x${H}`,'info');
 
   const d=0.045;
   const bboxStr=`${lon-d}%2C${lat-d*0.7}%2C${lon+d}%2C${lat+d*0.7}`;
@@ -737,28 +733,21 @@ function buildLocTriangle(lat,lon,city,region){
   el.style.width=TW+'px';
   el.style.height=TH+'px';
 
-  el.innerHTML=`
-    <svg xmlns="http://www.w3.org/2000/svg" width="${TW}" height="${TH}"
-      style="position:absolute;bottom:0;left:0;display:block;overflow:hidden">
-      <defs>
-        <clipPath id="triclip">
-          <polygon points="0,0 0,${TH} ${TW},${TH}"/>
-        </clipPath>
-      </defs>
-      <foreignObject x="0" y="0" width="${TW}" height="${TH}" clip-path="url(#triclip)">
-        <div xmlns="http://www.w3.org/1999/xhtml"
-          style="width:${TW}px;height:${TH}px;overflow:hidden;position:relative;background:#2a2a2a">
-          <iframe
-            src="https://www.openstreetmap.org/export/embed.html?bbox=${bboxStr}&layer=mapnik&marker=${lat}%2C${lon}"
-            style="width:${TW}px;height:${TH}px;border:none;pointer-events:none;filter:saturate(0.75) brightness(0.88)"
-            loading="lazy" scrolling="no"></iframe>
-        </div>
-      </foreignObject>
-      <line x1="0" y1="0" x2="${TW}" y2="${TH}" stroke="rgba(90,84,76,0.55)" stroke-width="1.5"/>
-    </svg>`;
+  el.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" width="${TW}" height="${TH}" style="display:block">
+    <defs><clipPath id="triclip"><polygon points="0,0 0,${TH} ${TW},${TH}"/></clipPath></defs>
+    <foreignObject x="0" y="0" width="${TW}" height="${TH}" clip-path="url(#triclip)">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="width:${TW}px;height:${TH}px;overflow:hidden;background:#1a1a1a">
+        <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=${bboxStr}&layer=mapnik&marker=${lat}%2C${lon}"
+          style="width:${TW}px;height:${TH}px;border:none;pointer-events:none;filter:saturate(0.75) brightness(0.85)"
+          loading="lazy" scrolling="no"></iframe>
+      </div>
+    </foreignObject>
+    <line x1="0" y1="0" x2="${TW}" y2="${TH}" stroke="rgba(90,84,76,0.6)" stroke-width="1.5"/>
+  </svg>`;
 
   el.classList.add('show');
-  tl(`location triangle: ${city||region}`,'info');
+  tl(`triangle shown`,'cmd',true);
+  }catch(e){tl(`triangle error: ${e}`,'err');}
 }
 
 function hideLocTriangle(){
@@ -860,15 +849,32 @@ async function loadVis(){
 }
 
 async function loadMap(ip){
-  try{
-    const d=await fetch(`https://ipapi.co/${ip}/json/`).then(r=>r.json());
-    if(d.error||!d.latitude){hideLocTriangle();return;}
-    const{latitude:lat,longitude:lon,city='',region=''}=d;
-    tl(`location: ${city||region} (${lat.toFixed(2)},${lon.toFixed(2)})`,'info');
-    // Only show triangle on wide screens (>1530px)
-    if(window.innerWidth>=1280) buildLocTriangle(lat,lon,city,region);
-    else hideLocTriangle();
-  }catch{hideLocTriangle();}
+  if(window.innerWidth<1280){hideLocTriangle();return;}
+  // Try multiple geo APIs in order
+  const apis=[
+    ()=>fetch(`https://ipapi.co/${ip}/json/`).then(r=>r.json()).then(d=>{
+      if(d.error||!d.latitude)throw new Error('no data');
+      return{lat:d.latitude,lon:d.longitude,city:d.city||'',region:d.region||''};
+    }),
+    ()=>fetch(`https://ip-api.com/json/${ip}?fields=lat,lon,city,regionName`).then(r=>r.json()).then(d=>{
+      if(d.status==='fail'||!d.lat)throw new Error('no data');
+      return{lat:d.lat,lon:d.lon,city:d.city||'',region:d.regionName||''};
+    }),
+    ()=>fetch(`https://freeipapi.com/api/json/${ip}`).then(r=>r.json()).then(d=>{
+      if(!d.latitude)throw new Error('no data');
+      return{lat:d.latitude,lon:d.longitude,city:d.cityName||'',region:d.regionName||''};
+    }),
+  ];
+  for(const api of apis){
+    try{
+      const{lat,lon,city,region}=await api();
+      tl(`location: ${city||region} (${lat.toFixed(2)},${lon.toFixed(2)})`,'info');
+      buildLocTriangle(lat,lon,city,region);
+      return;
+    }catch{}
+  }
+  tl('location: all apis failed','err');
+  hideLocTriangle();
 }
 
 // ═══════════════════════════════════════
