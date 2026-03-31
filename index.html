@@ -723,33 +723,41 @@ window.addEventListener('resize',()=>{clearTimeout(window._dsr);window._dsr=setT
 // ═══════════════════════════════════════
 function buildLocTriangle(lat,lon,city,region){
   const el=document.getElementById('loc-tri');
-  // Bigger: 30% of the smaller viewport dimension
-  const S=Math.round(Math.min(window.innerWidth*0.30, window.innerHeight*0.30));
-  el.style.width=S+'px';
-  el.style.height=S+'px';
+  const W=window.innerWidth, H=window.innerHeight;
+  const S=Math.round(Math.min(W*0.30, H*0.30));
 
-  // Triangle points:
-  // A = top-left (0, 0)
-  // B = bottom-left (0, S)
-  // C = bottom-right (S, S)
-  // The edge A→C is the hypotenuse — runs from (0,0) to (S,S), parallel to diagonal
-  // The edge B is the right-angle corner at bottom-left
-  // This is identical shape but now we call the A→C edge "parallel to diagonal" ✓
+  // The diagonal stripe goes from (0,0) to (W,H) — angle = atan2(H,W)
+  // Hypotenuse must be parallel: same slope H/W
+  // Triangle sits in bottom-left corner with:
+  //   B = (0, S)   — bottom-left (right angle)
+  //   C = (S, S)   — bottom-right
+  //   A = (0, S - S*(W/H))  — on left edge, height calculated so slope A→C = H/W
+  // slope A→C = (S - (S - S*W/H)) / S = W/H ✓ parallel to diagonal
+  const ratio = W / H;
+  const Ay = Math.round(S - S * ratio);  // top point on left edge
+  // If Ay < 0 (very wide screen), clamp and adjust Cx instead
+  const triPoints = Ay >= 0
+    ? `0,${Ay} 0,${S} ${S},${S}`
+    : `0,0 0,${S} ${Math.round(S * H/W)},${S}`;
 
-  // Zoom bbox: tighter = more zoomed in
-  // Calculate bbox for ~zoom 14 (roughly 0.015° per side)
-  const d=0.012;
-  const bboxStr=`${lon-d}%2C${lat-d*0.7}%2C${lon+d}%2C${lat+d*0.7}`;
+  // bbox: ±0.045° gives ~5km radius, city-level, point stays in frame
+  const d = 0.045;
+  const bboxStr = `${lon-d}%2C${lat-d*0.7}%2C${lon+d}%2C${lat+d*0.7}`;
+
+  // Hypotenuse line coords match triangle
+  const [hx1,hy1,hx2,hy2] = Ay >= 0
+    ? [0, Ay, S, S]
+    : [0, 0, Math.round(S*H/W), S];
+
+  el.style.width = S+'px';
+  el.style.height = S+'px';
 
   el.innerHTML=`
     <svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S}"
       style="position:absolute;bottom:0;left:0;overflow:hidden;display:block">
       <defs>
         <clipPath id="triclip">
-          <!-- Triangle with hypotenuse parallel to diagonal (45°): top-left→bottom-right -->
-          <!-- Points: bottom-left(0,S), bottom-right(S,S), top-left(0,0) -->
-          <!-- This gives hypotenuse from (0,0) to (S,S) = 45° = parallel to stripe -->
-          <polygon points="0,${S} ${S},${S} 0,0"/>
+          <polygon points="${triPoints}"/>
         </clipPath>
       </defs>
       <foreignObject x="0" y="0" width="${S}" height="${S}" clip-path="url(#triclip)">
@@ -761,8 +769,7 @@ function buildLocTriangle(lat,lon,city,region){
             loading="lazy" scrolling="no"></iframe>
         </div>
       </foreignObject>
-      <!-- Hypotenuse line: (0,0) to (S,S) — parallel to the diagonal stripe -->
-      <line x1="0" y1="0" x2="${S}" y2="${S}" stroke="rgba(90,84,76,0.55)" stroke-width="1.5"/>
+      <line x1="${hx1}" y1="${hy1}" x2="${hx2}" y2="${hy2}" stroke="rgba(90,84,76,0.55)" stroke-width="1.5"/>
     </svg>`;
 
   el.classList.add('show');
