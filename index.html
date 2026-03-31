@@ -345,7 +345,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     <span class="mt" id="mt-t">⏰ --:--:--</span>
     <span class="mt" id="mt-d">📅 …</span>
     <span class="mt" id="mt-u">⬆ uptime …</span>
-    <span class="mt">🔄 29.03.2026</span>
+    <span class="mt">🔄 31.03.2026</span>
   </div>
 
   <div class="sec" id="s-info">
@@ -484,7 +484,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 const UID='1074346632470077482';
 const LFK=atob('YjhjYTcwNGIwYzhhZjMzM2M2ODA1ZDlmNzlmODE5OTM=');
 const LFU='Luca1310';
-const UPD=new Date('2026-03-29T00:00:00');
+const UPD=new Date('2026-03-31T00:00:00');
 const PL=Date.now();
 const SLBL={online:'online',idle:'idle',dnd:'bitte nicht stören',offline:'offline'};
 const SCOL={online:'#3ecf8e',idle:'#f5a623',dnd:'#ed4245',offline:'#aaa49c'};
@@ -724,52 +724,39 @@ window.addEventListener('resize',()=>{clearTimeout(window._dsr);window._dsr=setT
 function buildLocTriangle(lat,lon,city,region){
   const el=document.getElementById('loc-tri');
   const W=window.innerWidth, H=window.innerHeight;
-  const S=Math.round(Math.min(W*0.30, H*0.30));
+  // TH = height of triangle (30% viewport height)
+  // TW = width so hypotenuse slope = H/W (same as diagonal)
+  const TH=Math.round(H*0.30);
+  const TW=Math.round(TH*(W/H));
 
-  // The diagonal stripe goes from (0,0) to (W,H) — angle = atan2(H,W)
-  // Hypotenuse must be parallel: same slope H/W
-  // Triangle sits in bottom-left corner with:
-  //   B = (0, S)   — bottom-left (right angle)
-  //   C = (S, S)   — bottom-right
-  //   A = (0, S - S*(W/H))  — on left edge, height calculated so slope A→C = H/W
-  // slope A→C = (S - (S - S*W/H)) / S = W/H ✓ parallel to diagonal
-  const ratio = W / H;
-  const Ay = Math.round(S - S * ratio);  // top point on left edge
-  // If Ay < 0 (very wide screen), clamp and adjust Cx instead
-  const triPoints = Ay >= 0
-    ? `0,${Ay} 0,${S} ${S},${S}`
-    : `0,0 0,${S} ${Math.round(S * H/W)},${S}`;
+  // Triangle: right angle at bottom-left
+  // (0,0)=top-left, (0,TH)=bottom-left, (TW,TH)=bottom-right
+  // Hypotenuse (0,0)→(TW,TH): slope = TH/TW = H/W ✓ parallel to diagonal
 
-  // bbox: ±0.045° gives ~5km radius, city-level, point stays in frame
-  const d = 0.045;
-  const bboxStr = `${lon-d}%2C${lat-d*0.7}%2C${lon+d}%2C${lat+d*0.7}`;
+  const d=0.045;
+  const bboxStr=`${lon-d}%2C${lat-d*0.7}%2C${lon+d}%2C${lat+d*0.7}`;
 
-  // Hypotenuse line coords match triangle
-  const [hx1,hy1,hx2,hy2] = Ay >= 0
-    ? [0, Ay, S, S]
-    : [0, 0, Math.round(S*H/W), S];
-
-  el.style.width = S+'px';
-  el.style.height = S+'px';
+  el.style.width=TW+'px';
+  el.style.height=TH+'px';
 
   el.innerHTML=`
-    <svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S}"
-      style="position:absolute;bottom:0;left:0;overflow:hidden;display:block">
+    <svg xmlns="http://www.w3.org/2000/svg" width="${TW}" height="${TH}"
+      style="position:absolute;bottom:0;left:0;display:block;overflow:hidden">
       <defs>
         <clipPath id="triclip">
-          <polygon points="${triPoints}"/>
+          <polygon points="0,0 0,${TH} ${TW},${TH}"/>
         </clipPath>
       </defs>
-      <foreignObject x="0" y="0" width="${S}" height="${S}" clip-path="url(#triclip)">
+      <foreignObject x="0" y="0" width="${TW}" height="${TH}" clip-path="url(#triclip)">
         <div xmlns="http://www.w3.org/1999/xhtml"
-          style="width:${S}px;height:${S}px;overflow:hidden;position:relative;background:#2a2a2a">
+          style="width:${TW}px;height:${TH}px;overflow:hidden;position:relative;background:#2a2a2a">
           <iframe
             src="https://www.openstreetmap.org/export/embed.html?bbox=${bboxStr}&layer=mapnik&marker=${lat}%2C${lon}"
-            style="width:${S}px;height:${S}px;border:none;pointer-events:none;filter:saturate(0.75) brightness(0.88)"
+            style="width:${TW}px;height:${TH}px;border:none;pointer-events:none;filter:saturate(0.75) brightness(0.88)"
             loading="lazy" scrolling="no"></iframe>
         </div>
       </foreignObject>
-      <line x1="${hx1}" y1="${hy1}" x2="${hx2}" y2="${hy2}" stroke="rgba(90,84,76,0.55)" stroke-width="1.5"/>
+      <line x1="0" y1="0" x2="${TW}" y2="${TH}" stroke="rgba(90,84,76,0.55)" stroke-width="1.5"/>
     </svg>`;
 
   el.classList.add('show');
