@@ -242,10 +242,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 /* LOCATION TRIANGLE — bottom-left corner */
 #loc-tri{position:fixed;bottom:0;left:0;z-index:50;pointer-events:none;
-  opacity:0;transition:opacity .8s ease;width:0;height:0;}
+  opacity:0;transition:opacity .8s ease;overflow:hidden;}
 #loc-tri.show{opacity:1;}
-#loc-tri canvas{position:absolute;bottom:0;left:0;display:block;pointer-events:none;}
-#loc-tri iframe{position:absolute;bottom:0;left:0;border:none;pointer-events:none;}
 
 /* FOOTER */
 .footer{text-align:center;font-family:'DM Mono',monospace;font-size:.6rem;
@@ -868,7 +866,7 @@ async function loadMap(ip){
     const{latitude:lat,longitude:lon,city='',region=''}=d;
     tl(`location: ${city||region} (${lat.toFixed(2)},${lon.toFixed(2)})`,'info');
     // Only show triangle on wide screens (>1530px)
-    if(window.innerWidth>1530) buildLocTriangle(lat,lon,city,region);
+    if(window.innerWidth>=1280) buildLocTriangle(lat,lon,city,region);
     else hideLocTriangle();
   }catch{hideLocTriangle();}
 }
