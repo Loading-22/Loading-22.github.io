@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" data-theme="auto">
+<html lang="en" data-theme="auto">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -310,7 +310,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 <div class="topbar">
   <div class="badge" id="rb">↺ 0s</div>
-  <div class="badge" id="vb">👁 …</div>
+  <div class="badge" id="vb">✨ …</div>
+  <button class="tbtn" id="langBtn" onclick="toggleLang()">🇩🇪</button>
   <button class="tbtn" id="themeBtn" onclick="toggleTheme()">◐ dark</button>
 </div>
 
@@ -331,10 +332,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         </div>
       </div>
     </div>
-    <p class="hero-bio">hey. ich bin <strong>luca</strong>, 15. gamer aus deutschland.</p>
+    <p class="hero-bio" id="hero-bio">hey. i'm <strong>luca</strong>, 15. gamer from germany.</p>
     <div class="tag-row">
       <span class="tag">🕹 gaming</span>
-      <span class="tag">🌙 nachtaktiv</span>
+      <span class="tag" id="tag-night">🌙 night owl</span>
       <span class="tag">🇩🇪 / 🇬🇧</span>
     </div>
   </div>
@@ -343,11 +344,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     <span class="mt" id="mt-t">⏰ --:--:--</span>
     <span class="mt" id="mt-d">📅 …</span>
     <span class="mt" id="mt-u">⬆ uptime …</span>
-    <span class="mt">🔄 31.03.2026</span>
+    <span class="mt" id="mt-upd">🔄 05/02/2026</span>
   </div>
 
   <div class="sec" id="s-info">
-    <div class="sec-head">// info</div>
+    <div class="sec-head" id="sh-info">// info</div>
     <div class="tiles">
       <div class="tile" id="tc-cpu" style="display:none">
         <div class="tl">cpu</div><div class="tv" id="tv-cpu">–</div>
@@ -368,16 +369,16 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   </div>
 
   <div class="sec" id="s-quotes">
-    <div class="sec-head">// quotes</div>
+    <div class="sec-head" id="sh-quotes">// quotes</div>
     <div class="qbox"><div class="qt" id="qt">laden…</div></div>
   </div>
 
   <div class="sec" id="s-music">
-    <div class="sec-head">// musik</div>
+    <div class="sec-head" id="sh-music">// music</div>
     <div class="mc" id="mc">
       <div class="mi" id="mi">🎵</div>
       <div class="mb2">
-        <div class="mt2" id="mt2">laden…</div>
+        <div class="mt2" id="mt2">loading…</div>
         <div class="ma" id="ma">last.fm</div>
       </div>
       <div class="mbdg last" id="mbdg">–</div>
@@ -385,11 +386,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   </div>
 
   <div class="sec" id="s-activity">
-    <div class="sec-head">// gerade aktiv</div>
+    <div class="sec-head" id="sh-activity">// currently active</div>
     <div class="act-card">
       <div class="act-img" id="ai">🎮</div>
       <div>
-        <div class="act-no" id="an">laden…</div>
+        <div class="act-no" id="an">loading…</div>
         <div class="act-nm" id="anm" style="display:none"></div>
         <div class="act-st" id="ast" style="display:none"></div>
       </div>
@@ -397,56 +398,56 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   </div>
 
   <div class="sec" id="s-socials">
-    <div class="sec-head">// mich adden</div>
+    <div class="sec-head" id="sh-socials">// add me</div>
     <div class="card-list">
       <a class="card" href="https://discord.com/users/1074346632470077482" target="_blank" rel="noopener" onclick="tl('start discord://1074346632470077482')">
         <div class="card-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z" fill="#5865F2"/></svg></div>
-        <div class="card-body"><div class="card-ttl">discord</div><div class="card-dsc">profil &amp; freundschaft</div></div>
+        <div class="card-body"><div class="card-ttl">discord</div><div class="card-dsc" id="dsc-discord">profile &amp; friends</div></div>
         <div class="card-arr">↗</div>
       </a>
       <a class="card" href="https://steamcommunity.com/profiles/76561199278052859" target="_blank" rel="noopener" onclick="tl('start steam://76561199278052859')">
         <div class="card-ico"><svg viewBox="0 0 24 24"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.187.008l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.029 4.524 4.524s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0z" fill="#4c9be8"/></svg></div>
-        <div class="card-body"><div class="card-ttl">steam</div><div class="card-dsc">profil &amp; freundschaft</div></div>
+        <div class="card-body"><div class="card-ttl">steam</div><div class="card-dsc" id="dsc-steam">profile &amp; friends</div></div>
         <div class="card-arr">↗</div>
       </a>
       <a class="card" href="https://store.epicgames.com/de/u/cb7afc4a30394918886a5d02dba6c7e1" target="_blank" rel="noopener" onclick="tl('start epicgames://cb7afc4a30394918886a5d02dba6c7e1')">
         <div class="card-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M3 2h18v14.5l-9 5.5-9-5.5V2zm9 14.8l6-3.7V4H6v9.1l6 3.7z" fill="var(--ink)"/></svg></div>
-        <div class="card-body"><div class="card-ttl">epic games</div><div class="card-dsc">profil besuchen</div></div>
+        <div class="card-body"><div class="card-ttl">epic games</div><div class="card-dsc" id="dsc-epic">visit profile</div></div>
         <div class="card-arr">↗</div>
       </a>
       <a class="card" href="https://socialclub.rockstargames.com/member/C_Users_Luca_/" target="_blank" rel="noopener" onclick="tl('start rockstar://C_Users_Luca_')">
         <div class="card-ico"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="var(--ink)" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="card-body"><div class="card-ttl">rockstar</div><div class="card-dsc">social club profil</div></div>
+        <div class="card-body"><div class="card-ttl">rockstar</div><div class="card-dsc" id="dsc-rockstar">social club profile</div></div>
         <div class="card-arr">↗</div>
       </a>
     </div>
   </div>
 
   <div class="sec" id="s-about">
-    <div class="sec-head">// über mich</div>
+    <div class="sec-head" id="sh-about">// about me</div>
     <div class="tiles">
-      <div class="tile"><div class="tl">sprachen</div><div class="tv">🇩🇪 deutsch<br>🇬🇧 englisch</div></div>
-      <div class="tile"><div class="tl">aktiv</div><div class="tv" style="color:var(--ink2)">abends &amp; nachts</div></div>
-      <div class="tile"><div class="tl">vibe</div><div class="tv" style="color:var(--ink2)">chill 😌</div></div>
+      <div class="tile"><div class="tl" id="tl-langs">languages</div><div class="tv">🇩🇪 german<br>🇬🇧 english</div></div>
+      <div class="tile"><div class="tl" id="tl-active">active</div><div class="tv" id="tv-active" style="color:var(--ink2)">evenings &amp; nights</div></div>
+      <div class="tile"><div class="tl">vibe</div><div class="tv" style="color:var(--ink2)">chill</div></div>
     </div>
   </div>
 
   <div class="sec" id="s-games">
-    <div class="sec-head">// worauf ich bock hab</div>
+    <div class="sec-head" id="sh-games">// currently into</div>
     <div class="gg">
-      <div class="gc">🌍 gta v</div><div class="gc">🧱 minecraft</div>
+      <div class="gc">GTAV</div><div class="gc">minecraft</div>
     </div>
   </div>
 
   <div class="sec" id="s-history">
-    <div class="sec-head">// discord verlauf</div>
+    <div class="sec-head" id="sh-history">// history</div>
     <div class="hlist" id="hl">
       <div class="hitem"><span class="hdot" style="background:#aaa49c"></span><span>–</span><span class="htm">–</span></div>
     </div>
   </div>
 
   <div class="sec" id="s-friends">
-    <div class="sec-head">// freunde</div>
+    <div class="sec-head" id="sh-friends">// friends</div>
     <div class="card-list">
       <a class="card" href="https://emiliop.carrd.co" target="_blank" rel="noopener" onclick="tl('start https://emiliop.carrd.co')">
         <div class="card-ico" style="font-size:1.1rem;background:var(--bg2)">👤</div>
@@ -482,47 +483,94 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 const UID='1074346632470077482';
 const LFK=atob('YjhjYTcwNGIwYzhhZjMzM2M2ODA1ZDlmNzlmODE5OTM=');
 const LFU='Luca1310';
-const UPD=new Date('2026-03-31T00:00:00');
+const UPD=new Date('2026-05-01T00:00:00');
 const PL=Date.now();
-const SLBL={online:'online',idle:'idle',dnd:'bitte nicht stören',offline:'offline'};
+const SLBL={online:'online',idle:'idle',dnd:'do not disturb',offline:'offline'};
+const SLBL_DE={online:'online',idle:'idle',dnd:'bitte nicht stören',offline:'offline'};
 const SCOL={online:'#3ecf8e',idle:'#f5a623',dnd:'#ed4245',offline:'#aaa49c'};
 let lastSt=null,lastTr='',hist=[];
+let LANG=localStorage.getItem('lang')||'en';
 
 // ═══════════════════════════════════════
 // QUOTES
 // ═══════════════════════════════════════
-const QQ=[
-'geh schlafen. — nein.','es ist nicht spät, es ist früh.','ich schlafe wenn ich tot bin.',
-'müdigkeit ist ein mindset.','die nacht gehört mir und meinem lüfter.',
+const QQ_EN=[
+'go to sleep. — no.','it\'s not late, it\'s early.','i\'ll sleep when i\'m dead.',
+'tiredness is a mindset.','the night belongs to me and my fan.',
+'3am is actually pretty productive.',
+'skill issue.','lag, trust.','fps drops? vibe check failed.',
+'one more. (said 3h ago)',
+'i\'m uninstalling this. (i\'m not uninstalling this)',
+'i\'m not tilted. i\'m disappointed by the system.',
+'why is the RAM always full. Oh minecraft...',
+'creeper. obviously.','built a nether portal. got lost.',
+'can\'t find my base anymore.',
+'touch grass? no thanks.',
+'i\'m not offline — i\'m invisible.',
+'pc loud today. not talking about it.','fan on max. everything normal.',
+'install updates? later. (3 months ago)',
+'home assistant runs 23/7.',
+'homeassistant.local:8123 is my home.','HA is to blame. always HA.','Home Assistant left the light on, not me.','Watering the plants…  "Alexa, water the plants."',
+'writing yaml at 1am. that\'s the vibe.',
+'i\'m not antisocial. i\'m selectively available.',
+'discord status: do not disturb. (gets ignored)',
+'online but mentally afk.','my online status is a lie.',
+'deadline is a suggestion.','waking up early for school. against nature.',
+'it works. i don\'t know why. i\'m not asking.',
+'reboot fixes 80% of all problems. the other 20% need AI.',
+'quick fix becomes permanent fix.','good enough.','runs.','could be worse.',
+'i\'m not tilted. i\'m disappointed by the system.',
+'i have no idea what i\'m doing. it works anyway.',
+];
+const QQ_DE=[
+'geh schlafen. — nein.','es ist nicht spät, es ist früh.',
+'müdigkeit ist ein mindset.',
 '3 uhr morgens ist eigentlich ganz produktiv.',
-'skill issue.','lag, trust.','fps drops? vibe check gescheitert.',
-'nein das spiel hat ein luca problem.','one more game. (vor 3h gesagt)',
-'ich deinstalliere das gleich. (deinstalliere ich nicht)',
-'ich bin nicht tilted. ich bin enttäuscht vom system.',
-'why is the RAM always full. oh. minecraft.',
-'creeper. natürlich.','nether portal gebaut. verlaufen.',
+'skill issue.','lag, trust.','fps drops?',
+'one more Match. (vor 3h gesagt)',
+'why is the RAM always full. oh. minecraft...',
+'nether. verlaufen.',
 'ich finde meine base nicht mehr.',
-'404: social life not found.','touch grass? nein danke.',
+'404','touch grass? nein danke.',
 'ich bin nicht offline — ich bin unsichtbar.',
-'pc laut heute. ich rede nicht drüber.','lüfter auf maximum. alles normal.',
-'updates installieren? später. (seit 3 monaten)',
-'ich hab zu viel rgb. es reicht noch nicht.',
-'home assistant automation: funktioniert 23/7.',
-'localhost:8123 ist mein zuhause.','der esp ist schuld. immer der esp.',
-'wled ist meine therapie.','yaml schreiben um 1 uhr. das ist der vibe.',
-'der bewegungsmelder hat angst vor mir.',
-'ich bin nicht antisozial. ich bin selektiv verfügbar.',
-'discord status: nicht stören. (wird ignoriert)',
+'lüfter auf max. normal.',
+'update installieren? später. (seit 3 monaten)',
+'home assistant läuft 23/7.',
+'homeassistant.local:8123 ist mein zuhause.','HA ist schuld.','Home Assistant hat das licht an gelassen, nicht ich.','Blumen gießen...   "Alexa, gieß die blumen."',
+'yaml schreiben um 1 uhr. das ist der vibe.',
+'discord status: nicht stören.',
 'online aber geistig afk.','mein online status ist eine lüge.',
-'hausaufgaben: ja mach ich. (lüge)',
 'abgabefrist ist ein richtwert.','früh aufstehen für schule. gegen die natur.',
 'es funktioniert. ich weiß nicht warum. ich frage nicht.',
-'reboot löst 80% aller probleme. die anderen 20% brauchen google.',
+'reboot löst 80% aller probleme. die anderen 20% brauchen KI.',
 'quick fix wird permanent fix.','passt schon.','läuft.','könnte schlimmer sein.',
 'ich bin nicht tilted. ich bin enttäuscht vom system.',
 'ich hab keine ahnung was ich tue. es klappt trotzdem.',
 ];
-function dq(){
+const QQ=QQ_EN; // alias, gets swapped by applyLang()
+
+function dq_en(){
+  const h=new Date().getHours(),d=new Date().getDay(),ua=navigator.userAgent,p=[];
+  if(h<4)p.push(`${h}am. you're sick.`);
+  if(h>=7&&h<9)p.push(`${h}am. school?`);
+  if(h>=20)p.push('prime time.','evening. the real day starts now.');
+  if(d===1)p.push('monday detected. condolences.');
+  if(d===5)p.push('friday night starts now.');
+  if(d===0||d===6)p.push('weekend. gaming session. mandatory.');
+  if(/Edg/i.test(ua))p.push('edge user. voluntarily?');
+  if(/Firefox/i.test(ua))p.push('firefox. one of us.');
+  if(/Chrome/i.test(ua)&&!/Edg/i.test(ua))p.push('chrome detected. RAM dead.');
+  const r=navigator.deviceMemory;
+  if(r&&r<=4)p.push(`${r}gb ram. living dangerously.`);
+  if(r&&r>=16)p.push(`${r}gb ram. minecraft uses 3 of them.`);
+  if(window.matchMedia('(prefers-color-scheme:dark)').matches)p.push('dark mode. obviously.');
+  else p.push('light mode. my eyes.');
+  const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+  if(['Europe/Berlin','Europe/Zurich','Europe/Vienna'].includes(tz))
+    p.push('germany detected. ever heard of herford?');
+  return p.length?p[Math.floor(Math.random()*p.length)]:null;
+}
+function dq_de(){
   const h=new Date().getHours(),d=new Date().getDay(),ua=navigator.userAgent,p=[];
   if(h<4)p.push(`${h} uhr. du bist krank.`);
   if(h>=7&&h<9)p.push(`${h} uhr morgens. schule?`);
@@ -543,7 +591,118 @@ function dq(){
     p.push('germany detected. kennst du herford?');
   return p.length?p[Math.floor(Math.random()*p.length)]:null;
 }
-function gq(){if(Math.random()<0.22){const q=dq();if(q)return q;}return QQ[Math.floor(Math.random()*QQ.length)];}
+function dq(){return LANG==='de'?dq_de():dq_en();}
+function gq(){
+  const pool=LANG==='de'?QQ_DE:QQ_EN;
+  if(Math.random()<0.22){const q=dq();if(q)return q;}
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+// ═══════════════════════════════════════
+// LANGUAGE SYSTEM
+// ═══════════════════════════════════════
+const T={
+  en:{
+    bio:`hey. i'm <strong>luca</strong>, 15. gamer from germany.`,
+    tagNight:'🌙 night owl',
+    shInfo:'// info',shQuotes:'// quotes',shMusic:'// music',
+    shActivity:'// currently active',shSocials:'// add me',
+    shAbout:'// about me',shGames:'// currently into',
+    shHistory:'// discord history',shFriends:'// friends',
+    tlLangs:'languages',tlActive:'active',tvActive:'evenings &amp; nights',
+    tvLangDe:'🇩🇪 german',tvLangEn:'🇬🇧 english',
+    dscDiscord:'profile &amp; friends',dscSteam:'profile &amp; friends',
+    dscEpic:'visit profile',dscRockstar:'social club profile',
+    anLoading:'loading…',mtLoading:'loading…',qtLoading:'loading…',
+    anNothing:'nothing active right now',
+    musicLast:'last',pcOnline:'pc online',pcOffline:'pc offline',
+    updDate:'🔄 05/01/2026',
+    cmdHelp:'available commands:',cmdHack:'initiating...','cmdHack2':'just kidding. you\'re luca.',
+    cmdEaster:'you found the easter egg command. based.',
+    cmdNotFound:(r)=>`'${r}' is not a recognized command.`,
+    termTitle:'luca@pc — cmd.exe',
+    footerClicks:{6:'nothing happened.',7:'really nothing.',8:'stop it.',9:'…',10:'🎮'},
+    footerMsgs:['made with ✨','ps: you read too far down','pps: srsly','✨','luca out'],
+    langBtn:'🇩🇪',
+    slbl:{online:'online',idle:'idle',dnd:'do not disturb',offline:'offline'},
+  },
+  de:{
+    bio:`hey. ich bin <strong>luca</strong>, 15. gamer aus deutschland.`,
+    tagNight:'🌙 nachtaktiv',
+    shInfo:'// info',shQuotes:'// quotes',shMusic:'// musik',
+    shActivity:'// gerade aktiv',shSocials:'// mich adden',
+    shAbout:'// über mich',shGames:'// worauf ich bock hab',
+    shHistory:'// discord verlauf',shFriends:'// freunde',
+    tlLangs:'sprachen',tlActive:'aktiv',tvActive:'abends &amp; nachts',
+    tvLangDe:'🇩🇪 deutsch',tvLangEn:'🇬🇧 englisch',
+    dscDiscord:'profil &amp; freundschaft',dscSteam:'profil &amp; freundschaft',
+    dscEpic:'profil besuchen',dscRockstar:'social club profil',
+    anLoading:'laden…',mtLoading:'laden…',qtLoading:'laden…',
+    anNothing:'gerade nichts aktiv',
+    musicLast:'zuletzt',pcOnline:'pc online',pcOffline:'pc offline',
+    updDate:'🔄 01.05.2026',
+    cmdHelp:'verfügbare commands:',cmdHack:'initiating...','cmdHack2':'just kidding. du bist luca.',
+    cmdEaster:'du hast den easter egg command gefunden. based.',
+    cmdNotFound:(r)=>`'${r}' ist kein interner oder externer Befehl.`,
+    termTitle:'luca@pc — cmd.exe',
+    footerClicks:{6:'nichts passiert.',7:'wirklich nichts.',8:'hör auf.',9:'…',10:'🎮'},
+    footerMsgs:['made with ✨','ps: du liest zu weit unten','pps: srsly','✨','luca out'],
+    langBtn:'🇬🇧',
+    slbl:{online:'online',idle:'idle',dnd:'bitte nicht stören',offline:'offline'},
+  }
+};
+
+function applyLang(lang){
+  LANG=lang;
+  const t=T[lang];
+  const f=document.getElementById('tf');
+  // Fade flash effect
+  f.style.opacity='.06';setTimeout(()=>f.style.opacity='0',220);
+  document.documentElement.lang=lang;
+  // update SLBL used by presence
+  Object.assign(SLBL,t.slbl);
+  // Hero
+  document.getElementById('hero-bio').innerHTML=t.bio;
+  document.getElementById('tag-night').textContent=t.tagNight;
+  // Section headers
+  const sh={
+    'sh-info':t.shInfo,'sh-quotes':t.shQuotes,'sh-music':t.shMusic,
+    'sh-activity':t.shActivity,'sh-socials':t.shSocials,'sh-about':t.shAbout,
+    'sh-games':t.shGames,'sh-history':t.shHistory,'sh-friends':t.shFriends
+  };
+  Object.entries(sh).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
+  // About tiles
+  const tlL=document.getElementById('tl-langs');if(tlL)tlL.textContent=t.tlLangs;
+  const tlA=document.getElementById('tl-active');if(tlA)tlA.textContent=t.tlActive;
+  const tvA=document.getElementById('tv-active');if(tvA)tvA.innerHTML=t.tvActive;
+  // Card descriptions
+  const dMap={'dsc-discord':t.dscDiscord,'dsc-steam':t.dscSteam,'dsc-epic':t.dscEpic,'dsc-rockstar':t.dscRockstar};
+  Object.entries(dMap).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.innerHTML=v;});
+  // Uptime date badge
+  const updEl=document.getElementById('mt-upd');if(updEl)updEl.textContent=t.updDate;
+  // Lang button shows opposite flag
+  document.getElementById('langBtn').textContent=t.langBtn;
+  // "nothing active" text if shown
+  const anEl=document.getElementById('an');
+  if(anEl&&anEl.style.display!=='none'&&anEl.textContent.match(/gerade|nothing/))
+    anEl.textContent=t.anNothing;
+  // "last" badge in music
+  const mbdg=document.getElementById('mbdg');
+  if(mbdg&&mbdg.classList.contains('last'))mbdg.textContent=t.musicLast;
+  // Quote — refresh immediately
+  const qel=document.getElementById('qt');
+  if(qel){qel.classList.add('fade');setTimeout(()=>{qel.textContent=`"${gq()}"`;qel.classList.remove('fade');},370);}
+  // Clock locale
+  tick();
+  // Terminal log
+  tl(`set lang --${lang}`,'cmd',true);
+}
+
+function toggleLang(){
+  const next=LANG==='en'?'de':'en';
+  localStorage.setItem('lang',next);
+  applyLang(next);
+}
 
 // ═══════════════════════════════════════
 // HOLE — using pre-built SVG paths that look like real torn paper
@@ -586,7 +745,7 @@ const CL=[
 '',
 'fetch("https://api.counterapi.dev/v1/luca-loading-22/visits/up")',
 '  .then(r => r.json())',
-'  .then(d => { vbadge.textContent = `👁 ${d.count}`; });',
+'  .then(d => { vbadge.textContent = `✨ ${d.count}`; });',
 '',
 'import { lanyard  } from "./api/lanyard.js";',
 'import { lastfm   } from "./api/lastfm.js";',
@@ -804,8 +963,9 @@ function fS(ms){const s=Math.floor(ms/1000);if(s<60)return`${s}s`;
   const m=Math.floor(s/60);if(m<60)return`${m}m`;return`${Math.floor(m/60)}h ${m%60}m`;}
 function tick(){
   const n=new Date();
-  const t=n.toLocaleTimeString('de-DE');
-  const ds=n.toLocaleDateString('de-DE',{weekday:'short',day:'numeric',month:'short'});
+  const locale=LANG==='de'?'de-DE':'en-GB';
+  const t=n.toLocaleTimeString(locale);
+  const ds=n.toLocaleDateString(locale,{weekday:'short',day:'numeric',month:'short'});
   document.getElementById('mt-t').textContent=`⏰ ${t}`;
   document.getElementById('mt-d').textContent=`📅 ${ds}`;
   const u=fU(n-UPD);
@@ -843,9 +1003,9 @@ async function loadVis(){
       :'https://api.counterapi.dev/v1/luca-site-v2/visits';
     const d=await fetch(endpoint).then(r=>r.json());
     const c=d.count??d.value??st.count;
-    document.getElementById('vb').textContent=`👁 ${Number(c).toLocaleString()}`;
+    document.getElementById('vb').textContent=`✨ ${Number(c).toLocaleString()}`;
     tl(`visitors: ${c}`,'info');tl('counterapi.dev','cmd',true);
-  }catch{document.getElementById('vb').textContent='👁 –';tl('visitors failed','err');}
+  }catch{document.getElementById('vb').textContent='✨ –';tl('visitors failed','err');}
 }
 
 async function loadMap(ip){
@@ -888,7 +1048,7 @@ async function loadStats(){
     ['cpu','ram','ssd'].forEach(k=>{
       document.getElementById('tc-'+k).style.display='';
     });
-    document.getElementById('pc-status').textContent='pc online';
+    document.getElementById('pc-status').textContent=T[LANG].pcOnline;
     document.getElementById('pc-status').style.color='var(--green)';
     // CPU
     document.getElementById('tv-cpu').textContent=d.cpu+'%';
@@ -910,7 +1070,7 @@ async function loadStats(){
       setSbar('sb-ssd-g',0,'#5f7aa5');
     }
   }catch{
-    document.getElementById('pc-status').textContent='pc offline';
+    document.getElementById('pc-status').textContent=T[LANG].pcOffline;
     document.getElementById('pc-status').style.color='';
   }
 }
@@ -933,7 +1093,7 @@ async function loadMusic(){
     const img=tr.image?.[2]?.['#text'];
     document.getElementById('mt2').textContent=title;
     document.getElementById('ma').textContent=artist;
-    document.getElementById('mbdg').textContent=live?'▶ live':'zuletzt';
+    document.getElementById('mbdg').textContent=live?'▶ live':T[LANG].musicLast;
     document.getElementById('mbdg').className=`mbdg ${live?'live':'last'}`;
     document.getElementById('mc').className=`mc${live?' playing':''}`;
     const ie=document.getElementById('mi');
@@ -949,8 +1109,9 @@ async function loadMusic(){
 // ═══════════════════════════════════════
 function addHist(s,act){
   const now=new Date();
-  const ts=now.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
-  const ds=now.toLocaleDateString('de-DE',{day:'numeric',month:'numeric'});
+  const locale=LANG==='de'?'de-DE':'en-GB';
+  const ts=now.toLocaleTimeString(locale,{hour:'2-digit',minute:'2-digit'});
+  const ds=now.toLocaleDateString(locale,{day:'numeric',month:'numeric'});
   hist.unshift({s,label:act?`${SLBL[s]||s} — ${act}`:(SLBL[s]||s),t:`${ds} ${ts}`});
   if(hist.length>8)hist.pop();
   const hl=document.getElementById('hl');hl.innerHTML='';
@@ -994,7 +1155,7 @@ async function loadPresence(){
         document.getElementById('ai').innerHTML=`<img src="${url}" onerror="this.parentElement.textContent='🎮'" alt="">`;
       }
     }else{
-      document.getElementById('an').textContent='gerade nichts aktiv';
+    document.getElementById('an').textContent=T[LANG].anNothing;
       document.getElementById('anm').style.display='none';
       document.getElementById('ast').style.display='none';
     }
@@ -1002,7 +1163,7 @@ async function loadPresence(){
   }catch{
     document.getElementById('hdl').textContent='// luca';
     document.getElementById('stxt').textContent='offline';
-    document.getElementById('an').textContent='gerade nichts aktiv';
+    document.getElementById('an').textContent=T[LANG].anNothing;
   }
 }
 
@@ -1063,7 +1224,7 @@ function tExp(){
 
 const CMDS={
   'help':()=>{
-    tl('verfügbare commands:','info');
+    tl(T[LANG].cmdHelp,'info');
     ['ls','whoami','pwd','cls/clear','date','uptime','dark/light',
      'glitch','matrix','hack','sudo','rm -rf /','shutdown','reboot','exit','easter']
     .forEach(c=>tl(`  ${c}`,'info'));
@@ -1075,7 +1236,7 @@ const CMDS={
   'sudo':()=>tl('permission denied','err'),
   'sudo su':()=>tl('permission denied','err'),
   'rm -rf /':()=>{tl('EPERM: operation not permitted','err');setTimeout(()=>tl('CRITICAL: filesystem protection active','warn'),400);},
-  'hack':()=>{tl('initiating...','cmd');setTimeout(()=>tl('just kidding. du bist luca.','info'),900);},
+  'hack':()=>{tl(T[LANG].cmdHack,'cmd');setTimeout(()=>tl(T[LANG].cmdHack2,'info'),900);},
   'ipconfig':()=>tl('IPv4: [REDACTED]   MAC: DE:AD:BE:EF:00:01','info'),
   'ping google.com':()=>{
     tl('pinging...','cmd');
@@ -1092,9 +1253,9 @@ const CMDS={
   'dark':()=>{setTheme('dark');tl('set theme --dark','cmd',true);},
   'light':()=>{setTheme('light');tl('set theme --light','cmd',true);},
   'date':()=>tl(new Date().toString(),'info'),
-  'uptime':()=>tl(`seit update: ${fU(Date.now()-UPD)}`,'info'),
+  'uptime':()=>tl(`since update: ${fU(Date.now()-UPD)}`,'info'),
   'exit':()=>tCls(),
-  'easter':()=>tl('du hast den easter egg command gefunden. based.','info'),
+  'easter':()=>tl(T[LANG].cmdEaster,'info'),
 };
 
 document.getElementById('ti').addEventListener('keydown',e=>{
@@ -1103,7 +1264,7 @@ document.getElementById('ti').addEventListener('keydown',e=>{
   tl(raw,'cmd');const h=CMDS[raw.toLowerCase()];
   if(h)h();
   else{
-    setTimeout(()=>tl(`'${raw}' ist kein interner oder externer Befehl.`,'err'),100);
+    setTimeout(()=>tl(T[LANG].cmdNotFound(raw),'err'),100);
     setTimeout(()=>tl('0x80070002 ERROR_FILE_NOT_FOUND','err'),250);
   }
 });
@@ -1112,29 +1273,31 @@ document.getElementById('ti').addEventListener('keydown',e=>{
 // EASTER EGGS
 // ═══════════════════════════════════════
 let cl=0;
-const cm={6:'nichts passiert.',7:'wirklich nichts.',8:'hör auf.',9:'…',10:'🎮'};
 document.getElementById('nm').addEventListener('click',()=>{
   cl++;
+  const cm=T[LANG].footerClicks;
   const cc=document.getElementById('cc');cc.style.display='inline';cc.textContent=` ×${cl}`;
-  tl(`ERROR: zu viele klicks (${cl})`,'err');
+  tl(`ERROR: too many clicks (${cl})`,'err');
   if(cm[cl]){const t=document.getElementById('toast');t.textContent=cm[cl];t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
   if(cl===10){document.body.style.transition='filter .6s';document.body.style.filter='hue-rotate(180deg)';setTimeout(()=>document.body.style.filter='hue-rotate(0deg)',1300);tl('CRITICAL: hue-rotate 180deg','err');}
 });
 let fc=0;
-const fm=['made with ☕ + zu wenig schlaf','ps: du liest zu weit unten','pps: srsly','respekt für die ausdauer','🎮 luca out'];
 document.getElementById('footer').addEventListener('click',()=>{
+  const fm=T[LANG].footerMsgs;
   const m=fm[Math.min(fc++,fm.length-1)];
   const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');
   clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);
   tl(`echo "${m}"`,'cmd');
 });
 console.log('%c hey. ','background:#1a1916;color:#f5f2ed;padding:4px 8px;border-radius:4px;font-family:monospace;font-size:14px;');
-console.log('%c easter eggs: name 10x klicken, konami code, footer ','color:#9a9590;font-family:monospace;');
+console.log('%c easter eggs: name 10x click, konami code, footer ','color:#9a9590;font-family:monospace;');
 
 // ═══════════════════════════════════════
 // BOOT
 // ═══════════════════════════════════════
 (async()=>{
+  // Apply saved language (no flash on first load)
+  applyLang(LANG);
   tl('init luca.exe','cmd',true);
   await new Promise(r=>setTimeout(r,80));
   tl('os: Windows 11 x64','info');
