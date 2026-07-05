@@ -332,7 +332,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         </div>
       </div>
     </div>
-    <p class="hero-bio" id="hero-bio">hey. i'm <strong>luca</strong>, 15. gamer from germany.</p>
+    <p class="hero-bio" id="hero-bio">hey. i'm <strong>luca</strong>. gamer from germany.</p>
     <div class="tag-row">
       <span class="tag">🕹 gaming</span>
       <span class="tag" id="tag-night">🌙 night owl</span>
@@ -621,8 +621,8 @@ const T={
     cmdEaster:'you found the easter egg command. based.',
     cmdNotFound:(r)=>`'${r}' is not a recognized command.`,
     termTitle:'luca@pc — cmd.exe',
-    footerClicks:{6:'nothing happened.',7:'really nothing.',8:'stop it.',9:'…',10:'🎮'},
-    footerMsgs:['made with ✨','ps: you read too far down','pps: srsly','✨','luca out'],
+    footerClicks:{6:'nothing happened.',7:'really nothing.',8:'nothing.',9:'…',10:'🎮'},
+    footerMsgs:['made with ✨','ps: you read too far down','✨',' out'],
     langBtn:'🇩🇪',
     slbl:{online:'online',idle:'idle',dnd:'do not disturb',offline:'offline'},
   },
@@ -645,8 +645,8 @@ const T={
     cmdEaster:'du hast den easter egg command gefunden. based.',
     cmdNotFound:(r)=>`'${r}' ist kein interner oder externer Befehl.`,
     termTitle:'luca@pc — cmd.exe',
-    footerClicks:{6:'nichts passiert.',7:'wirklich nichts.',8:'hör auf.',9:'…',10:'🎮'},
-    footerMsgs:['made with ✨','ps: du liest zu weit unten','pps: srsly','✨','luca out'],
+    footerClicks:{6:'nichts passiert.',7:'wirklich nichts.',8:'stop.',9:'…',10:'🎮'},
+    footerMsgs:['made with ✨','ps: du liest zu weit unten','✨',' out'],
     langBtn:'🇬🇧',
     slbl:{online:'online',idle:'idle',dnd:'bitte nicht stören',offline:'offline'},
   }
@@ -1230,7 +1230,7 @@ const CMDS={
     .forEach(c=>tl(`  ${c}`,'info'));
   },
   'ls':()=>tl('index.html  discord.lnk  steam.lnk','info'),
-  'whoami':()=>tl('luca. 15. gamer. nerd.','info'),
+  'whoami':()=>tl('luca. 15. gamer.','info'),
   'pwd':()=>tl('C:\\Users\\luca\\website','info'),
   'cls':()=>logEl.innerHTML='','clear':()=>logEl.innerHTML='',
   'sudo':()=>tl('permission denied','err'),
