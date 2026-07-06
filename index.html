@@ -439,6 +439,43 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     </div>
   </div>
 
+  <div class="sec" id="s-mcserver">
+    <div class="sec-head" id="sh-mcserver">// minecraft server</div>
+    <div class="card-list">
+
+      <div class="card" style="cursor:pointer" onclick="copyAddr('java')">
+        <div class="card-ico" style="font-size:1.1rem">🖱️</div>
+        <div class="card-body">
+          <div class="card-ttl">java</div>
+          <div class="card-dsc" id="mc-java-addr">worth-forced.gl.joinmc.link</div>
+        </div>
+        <div class="card-arr" id="mc-java-icon">⧉</div>
+      </div>
+
+      <div class="card" style="cursor:pointer" onclick="copyAddr('bedrock')">
+        <div class="card-ico" style="font-size:1.1rem">🎮</div>
+        <div class="card-body">
+          <div class="card-ttl">bedrock</div>
+          <div class="card-dsc" style="display:flex;align-items:center;gap:6px">
+            <span id="mc-bedrock-addr">worth-forced.gl.at.ply.gg</span>
+            <span class="mt" style="padding:2px 7px;font-size:.6rem">port <span id="mc-bedrock-port">35727</span></span>
+          </div>
+        </div>
+        <div class="card-arr" id="mc-bedrock-icon">⧉</div>
+      </div>
+
+      <a class="card" id="mc-map-link" href="menu-veterans.gl.joinmc.link" target="_blank" rel="noopener">
+        <div class="card-ico" style="font-size:1.1rem">🗺️</div>
+        <div class="card-body">
+          <div class="card-ttl">map</div>
+          <div class="card-dsc">map in browser</div>
+        </div>
+        <div class="card-arr">↗</div>
+      </a>
+
+    </div>
+  </div>
+
   <div class="sec" id="s-history">
     <div class="sec-head" id="sh-history">// history</div>
     <div class="hlist" id="hl">
@@ -449,15 +486,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   <div class="sec" id="s-friends">
     <div class="sec-head" id="sh-friends">// friends</div>
     <div class="card-list">
-      <a class="card" href="https://emiliop.carrd.co" target="_blank" rel="noopener" onclick="tl('start https://emiliop.carrd.co')">
+      <a class="card" href="_" target="_blank" rel="noopener" onclick="tl('_')">
         <div class="card-ico" style="font-size:1.1rem;background:var(--bg2)">👤</div>
-        <div class="card-body"><div class="card-ttl">emilio</div><div class="card-dsc">emiliop.carrd.co</div></div>
+        <div class="card-body"><div class="card-ttl">_</div><div class="card-dsc">_</div></div>
         <div class="card-arr">↗</div>
       </a>
     </div>
   </div>
 
-  <div class="footer" id="footer">luca · 2026</div>
+  <div class="footer" id="footer">luca · 202X</div>
 </div>
 
 <div id="terminal">
@@ -483,7 +520,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 const UID='1074346632470077482';
 const LFK=atob('YjhjYTcwNGIwYzhhZjMzM2M2ODA1ZDlmNzlmODE5OTM=');
 const LFU='Luca1310';
-const UPD=new Date('2026-05-01T00:00:00');
+const UPD=new Date('2026-07-06T22:46:34');
 const PL=Date.now();
 const SLBL={online:'online',idle:'idle',dnd:'do not disturb',offline:'offline'};
 const SLBL_DE={online:'online',idle:'idle',dnd:'bitte nicht stören',offline:'offline'};
@@ -1193,6 +1230,27 @@ function glt(d=200){const e=document.getElementById('nm');e.classList.add('on');
 function schedG(){setTimeout(()=>{glt(180);schedG();},15000+Math.random()*28000);}schedG();
 
 // ═══════════════════════════════════════
+// MINECRAFT SERVER
+// ═══════════════════════════════════════
+const MC_JAVA='play.deineadresse.de';
+const MC_BEDROCK='play.deineadresse.de';
+const MC_BEDROCK_PORT='19132';
+
+function copyAddr(type){
+  const text = type==='java' ? MC_JAVA : `${MC_BEDROCK}:${MC_BEDROCK_PORT}`;
+  navigator.clipboard.writeText(text).then(()=>{
+    const t=document.getElementById('toast');
+    t.textContent=`kopiert: ${text}`;
+    t.classList.add('show');
+    clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200);
+    const icon=document.getElementById(type==='java'?'mc-java-icon':'mc-bedrock-icon');
+    icon.textContent='✓';setTimeout(()=>icon.textContent='⧉',1200);
+    tl(`clip: ${text}`,'cmd',true);
+  }).catch(()=>tl('clipboard fehlgeschlagen','err'));
+}
+
+  
+// ═══════════════════════════════════════
 // TERMINAL
 // ═══════════════════════════════════════
 const logEl=document.getElementById('tlog');
@@ -1230,7 +1288,7 @@ const CMDS={
     .forEach(c=>tl(`  ${c}`,'info'));
   },
   'ls':()=>tl('index.html  discord.lnk  steam.lnk','info'),
-  'whoami':()=>tl('luca. 15. gamer.','info'),
+  'whoami':()=>tl('luca. gamer. lowkey dev.','info'),
   'pwd':()=>tl('C:\\Users\\luca\\website','info'),
   'cls':()=>logEl.innerHTML='','clear':()=>logEl.innerHTML='',
   'sudo':()=>tl('permission denied','err'),
